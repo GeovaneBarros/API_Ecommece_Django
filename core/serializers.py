@@ -7,12 +7,14 @@ class ContatoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contato
         fields = '__all__'
+        extra_kwargs = {'cliente': {'read_only': True}}
 
 class EnderecoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Endereco
         fields = '__all__'
-
+        extra_kwargs = {'cliente': {'read_only': True}}
+        
 class MarcaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Marca
@@ -52,4 +54,4 @@ class UserSerializer(serializers.ModelSerializer):
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
-        fields = ['nome', 'sobrenome','cpf','contato','endereco']
+        fields = ['nome', 'sobrenome','cpf']

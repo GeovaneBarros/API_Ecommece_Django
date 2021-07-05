@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from core.models.base import Marca, Contato, Endereco, Cliente, Categoria, SubCategoria, Produto
 from core import serializers
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.http import Http404
 # Create your views here.
 
 
@@ -12,6 +13,15 @@ class ContatoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Contato.objects.all()
     serializer_class = serializers.ContatoSerializer
+
+    def create(self, serializer):
+        try:
+            cliente = Cliente.objects.get(user=self.request.user)
+            serializer.save(cliente = cliente)
+        except Cliente.DoesNotExist:
+            response = Response({'Cliente does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+            return response
+
 
 class EnderecoViewset(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
